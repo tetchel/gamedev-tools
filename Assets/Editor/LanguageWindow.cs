@@ -12,11 +12,11 @@ public class LanguageWindow : EditorWindow {
             STRINGS_DIR_NAME = "LocalizedStrings",
             STRINGS_FILE_EXT = ".csv";
 
-    private int selectedLanguageIndex = 0;
-    private List<string> languages = new List<string>();
+    private int _selectedLanguageIndex = 0;
+    private List<string> _languages = new List<string>();
 
     private const string NEW_LANGUAGE_INIT = "Enter a new language";
-    private string newLanguage = NEW_LANGUAGE_INIT;
+    private string _newLanguageTextField = NEW_LANGUAGE_INIT;
 
     // Path to the Assets/LocalizerStrings folder, which contains any number of .csv files containing strings
     private static DirectoryInfo stringsDir;
@@ -32,8 +32,8 @@ public class LanguageWindow : EditorWindow {
         // Load languages from EditorPrefs - reverse of what we do in OnDestroy()
         string selectedLanguage = EditorPrefs.GetString(PREFS_SELECTED_LANG);
 
-        languages = loadAllLanguages();
-        selectedLanguageIndex = languages.FindIndex(l => l == selectedLanguage);
+        _languages = loadAllLanguages();
+        _selectedLanguageIndex = _languages.FindIndex(l => l == selectedLanguage);
     }
 
     public static List<string> loadAllLanguages() {
@@ -53,10 +53,10 @@ public class LanguageWindow : EditorWindow {
     private void OnGUI() {
         EditorGUILayout.Space();
         GUILayout.BeginHorizontal();
-        newLanguage = GUILayout.TextField(newLanguage, 32);
+        _newLanguageTextField = GUILayout.TextField(_newLanguageTextField, 32);
 
         if (GUILayout.Button("Add", GUILayout.Width(100))) {
-            tryAddLanguage(newLanguage);
+            tryAddLanguage(_newLanguageTextField);
             // Clearing the language input box would be good
         }
 
@@ -64,23 +64,23 @@ public class LanguageWindow : EditorWindow {
 
         EditorGUILayout.Space();
 
-        for (int i = 0; i < languages.Count; i++) {
+        for (int i = 0; i < _languages.Count; i++) {
             GUILayout.BeginHorizontal();
-            bool selected = EditorGUILayout.ToggleLeft(languages[i], selectedLanguageIndex == i);
+            bool selected = EditorGUILayout.ToggleLeft(_languages[i], _selectedLanguageIndex == i);
             if (selected) {
-                selectedLanguageIndex = i;
+                _selectedLanguageIndex = i;
             }
 
             if (GUILayout.Button("Remove", GUILayout.Width(100))) {
                 bool remove = EditorUtility.DisplayDialog("Remove Language",
-                    "Are you sure you want to remove " + languages[i] + "?\nThis will not delete any of its strings.", 
+                    "Are you sure you want to remove " + _languages[i] + "?\nThis will not delete any of its strings.", 
                     "Yes", "No");
 
                 if (remove) {
-                    languages.RemoveAt(i);
+                    _languages.RemoveAt(i);
                     // Make sure a language is still selected
-                    if (selectedLanguageIndex == i && selectedLanguageIndex != 0) {
-                        selectedLanguageIndex--;
+                    if (_selectedLanguageIndex == i && _selectedLanguageIndex != 0) {
+                        _selectedLanguageIndex--;
                     }
                 }
             }
@@ -94,19 +94,19 @@ public class LanguageWindow : EditorWindow {
                 "The language name can only contain letters and numbers.", "OK");
         }
         else {
-            if (languages.Any(s => s.Equals(language, StringComparison.InvariantCultureIgnoreCase))) {
+            if (_languages.Any(s => s.Equals(language, StringComparison.InvariantCultureIgnoreCase))) {
                 EditorUtility.DisplayDialog("Language Already Exists",
                     "There is already a language called \"" + language + "\".", "OK");
             }
             else {
-                languages.Add(language);
+                _languages.Add(language);
 
                 string[] stringFiles = getStringFiles();
 
                 // String files must be in Assets/LocalizedStrings/*.csv. All csv files will be picked up
                 // Create a strings file if one does not exist already
                 if (stringFiles.Count() == 0) {
-                    string sheetPath = createSimpleSpreadsheet(languages);
+                    string sheetPath = createSimpleSpreadsheet(_languages);
                     AssetDatabase.Refresh();
                     
                     EditorUtility.DisplayDialog("Created strings spreadsheet", 
@@ -137,9 +137,9 @@ public class LanguageWindow : EditorWindow {
     private void OnDestroy() {
         // TODO add Save/Apply button so you don't have to close the window
         // Save the languages separated by spaces
-        string allLanguages = String.Join(" ", languages.ToArray());
+        string allLanguages = String.Join(" ", _languages.ToArray());
 
         EditorPrefs.SetString(PREFS_ALL_LANGS, allLanguages);
-        EditorPrefs.SetString(PREFS_SELECTED_LANG, languages[selectedLanguageIndex]);
+        EditorPrefs.SetString(PREFS_SELECTED_LANG, _languages[_selectedLanguageIndex]);
     }
 }

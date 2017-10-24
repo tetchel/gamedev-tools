@@ -24,7 +24,6 @@ public class LocalizerEditor : Editor {
         string[] stringFiles = LanguageWindow.getStringFiles();
         Dictionary<string, string> languageStrings = new Dictionary<string, string>();
 
-
         // For each text containing an externalized string, replace the externalized string placeholder
         // with the actual string value for the current language.
         FindObjectsOfType<Text>()

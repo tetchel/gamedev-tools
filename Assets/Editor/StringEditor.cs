@@ -10,21 +10,18 @@ public class StringEditor : EditorWindow {
     // The first key is the string name, which points to a dict which maps language names to translated strings.dict().
     private SerializableStringDictionary _strings;
 
-  
-
     private static string _storageFile;
 
     // default window size, will be overwritten when user resizes.
-    private Vector2 _size = new Vector2(1280, 720);
+    // private Vector2 _size = new Vector2(1280, 720);
 
-    protected StringEditor() { }
+    private StringEditor() { }
 
     public static StringEditor instance() {
         if(_instance == null) {
             _instance = CreateInstance<StringEditor>();
             _instance.OnEnable();
         }
-
         return _instance;
     }
 
@@ -37,16 +34,14 @@ public class StringEditor : EditorWindow {
         return _strings.dict();
     }
 
-    void OnEnable() { 
+    void OnEnable() {
+        // load the dictionary from the xml
         _storageFile = Path.Combine(Application.dataPath, "strings.xml");
         _strings = SerializableStringDictionary.read<SerializableStringDictionary>(_storageFile);
-
-        minSize = _size;
     }
 
     void OnDestroy() {
         // Remember size in case user resized
-        _size = position.size;
 
         // Save the dictionary to file
         SerializableStringDictionary.write(_strings, _storageFile);
@@ -82,14 +77,15 @@ public class StringEditor : EditorWindow {
         List<string> languages = LanguageEditor.loadAllLanguages();
 
         int removeButtonWidth = 80;
+        int rowHeight = 20;
         // first column is smaller than the others
-        float firstColWidth = (position.width - removeButtonWidth) / (languages.Count + 1) / 2;
+        //float firstColWidth = (position.width - removeButtonWidth) / (languages.Count + 1) / 2;
         // rest of the columns take up remaining space evenly. -25 stops overflow out the right side
-        float subseqColWidth = (position.width - firstColWidth - removeButtonWidth - 25) / (languages.Count);
+        float subseqColWidth = (position.width - removeButtonWidth - 25) / (languages.Count + 1);
         
         // Top row - Titles
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("String Name", GUILayout.Width(firstColWidth));
+        EditorGUILayout.LabelField("String Name", GUILayout.Width(subseqColWidth));
         foreach (string lang in languages) {
             EditorGUILayout.LabelField(lang, GUILayout.Width(subseqColWidth));
         }
@@ -99,16 +95,20 @@ public class StringEditor : EditorWindow {
         // In the stringsTable loop that draws the translated strings, this dictionary tracks strings that 
         // want to be renamed. This is so that  we can rename (ie, delete and re-add) those entries after the loop finishes.
         Dictionary<string, string> stringsToRename = new Dictionary<string, string>();
-        
-        // Loop over strings, and put the string name + the corresponding translated strings into the table
+       
+        int originalFontsize = GUI.skin.textField.fontSize;
+        // Loop over strings, and put the string name + the corresponding translated strings into the table as rows
         foreach (KeyValuePair<string, Dictionary<string, string>> entry in _strings.dict()) {
             string stringName = entry.Key;
             Dictionary<string, string> stringValues = entry.Value;
 
+            GUI.skin.textField.fontSize = 14;
+
             EditorGUILayout.BeginHorizontal();
             // It would be better to make this a Delayed field since we don't have to store values while user is typing
             // But then if a user closes the window without deselecting the textfield, the changes will not be saved.
-            string newStringName = EditorGUILayout.TextField(stringName, GUILayout.Width(firstColWidth));
+            string newStringName = EditorGUILayout.TextField(stringName, GUILayout.Width(subseqColWidth), 
+                GUILayout.Height(rowHeight));
             if(newStringName != stringName) {
                 if(stringsToRename.ContainsKey(stringName)) {
                     stringsToRename.Remove(stringName);
@@ -119,12 +119,12 @@ public class StringEditor : EditorWindow {
             foreach(string lang in languages) {
                 // Get this language's version of the current string
                 string translated;
-                bool got = stringValues.TryGetValue(lang, out translated);
-                if(!got) {
+                if(!stringValues.TryGetValue(lang, out translated)) {
                     translated = "String N/A";
                 }
                 // Should be a delayed text field as discussed above
-                string newTranslated = EditorGUILayout.TextField(translated, GUILayout.Width(subseqColWidth));
+                string newTranslated = EditorGUILayout.TextField(translated, GUILayout.Width(subseqColWidth), 
+                    GUILayout.Height(rowHeight));
 
                 if(newTranslated != translated) {
                     stringValues.Remove(lang);
@@ -133,7 +133,8 @@ public class StringEditor : EditorWindow {
                 }
             }
 
-            if(GUILayout.Button("Remove", GUILayout.Width(removeButtonWidth))) {
+            // a Remove button for each string
+            if(GUILayout.Button("Remove", GUILayout.Width(removeButtonWidth), GUILayout.Height(rowHeight))) {
                 if(EditorUtility.DisplayDialog("Remove String", "Are you ABSOLUTELY sure you want to remove " 
                     + stringName + "?\nThis WILL DELETE all translations of this string.", 
                     "OK", "Cancel")) {
@@ -143,13 +144,13 @@ public class StringEditor : EditorWindow {
             }
             EditorGUILayout.EndHorizontal();
         }
+        GUI.skin.textField.fontSize = originalFontsize;
         
         // Rename any keys that were changed - we can't edit these above because it would change the dictionary
         // being iterated over
         foreach (KeyValuePair<string, string> entry in stringsToRename) {
             Dictionary<string, string> translations;
-            bool got = _strings.dict().TryGetValue(entry.Key, out translations);
-            if(!got) {
+            if(!_strings.dict().TryGetValue(entry.Key, out translations)) {
                 Debug.LogError("Failed to get stringToRename: " + entry.Key);
             }
             else {
@@ -162,11 +163,11 @@ public class StringEditor : EditorWindow {
         }
         stringsToRename.Clear();
 
-        string defaultStringName = "Unnamed_String";
+        string defaultStringName = "NewString";
         int defaultStringIndex = 1;
-        if(GUILayout.Button("Add String", GUILayout.Width(firstColWidth), GUILayout.Height(20))) {
+        if(GUILayout.Button("Add String", GUILayout.Width(subseqColWidth), GUILayout.Height(30))) {
             // Add an index to the new string names to prevent collision
-            // eg. UnnamedString, UnnamedString1, ...
+            // eg. UnnamedString, UnnamedString1, UnnamedString2 ...
             while(_strings.dict().ContainsKey(defaultStringName)) {
                 if(defaultStringIndex > 1) {
                     defaultStringName = defaultStringName.Substring(0, defaultStringName.Length - 1);

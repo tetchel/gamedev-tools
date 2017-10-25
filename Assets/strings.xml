@@ -23,10 +23,22 @@
           <d2p1:Key>safzdxvvew</d2p1:Key>
           <d2p1:Value>vvvvvvvvvvvvvvvvvv</d2p1:Value>
         </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>english</d2p1:Key>
+          <d2p1:Value>!@#)%*&amp;*(#&amp;*(_+~</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>french</d2p1:Key>
+          <d2p1:Value>french 123 </d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>spanish</d2p1:Key>
+          <d2p1:Value>spanish 123</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
       </d2p1:Value>
     </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
     <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
-      <d2p1:Key>fsdfdf</d2p1:Key>
+      <d2p1:Key>string234</d2p1:Key>
       <d2p1:Value>
         <d2p1:KeyValueOfstringstring>
           <d2p1:Key>en</d2p1:Key>
@@ -44,15 +56,93 @@
           <d2p1:Key>safzdxvvew</d2p1:Key>
           <d2p1:Value>qqqqqqqqqqqqqqqqqq1</d2p1:Value>
         </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>qqqq</d2p1:Key>
+          <d2p1:Value>q2</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>es</d2p1:Key>
+          <d2p1:Value>hola2</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>english</d2p1:Key>
+          <d2p1:Value />
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>french</d2p1:Key>
+          <d2p1:Value>zzzzzzzzz</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>spanish</d2p1:Key>
+          <d2p1:Value>spanis h234</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
       </d2p1:Value>
     </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
     <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
-      <d2p1:Key>Unnamed_String</d2p1:Key>
-      <d2p1:Value />
+      <d2p1:Key>optiona</d2p1:Key>
+      <d2p1:Value>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>en</d2p1:Key>
+          <d2p1:Value>optiona-en</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>fr</d2p1:Key>
+          <d2p1:Value>optiona-fr</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>qqqq</d2p1:Key>
+          <d2p1:Value>optiona-qqq</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>es</d2p1:Key>
+          <d2p1:Value>optiona-es</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>english</d2p1:Key>
+          <d2p1:Value />
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>french</d2p1:Key>
+          <d2p1:Value />
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>spanish</d2p1:Key>
+          <d2p1:Value />
+        </d2p1:KeyValueOfstringstring>
+      </d2p1:Value>
     </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
     <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
-      <d2p1:Key>Unnamed_String1</d2p1:Key>
-      <d2p1:Value />
+      <d2p1:Key>hello world</d2p1:Key>
+      <d2p1:Value>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>en</d2p1:Key>
+          <d2p1:Value>hello world</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>fr</d2p1:Key>
+          <d2p1:Value>bonjour tout le monde</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>qqqq</d2p1:Key>
+          <d2p1:Value>q</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>es</d2p1:Key>
+          <d2p1:Value>hola todos</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>english</d2p1:Key>
+          <d2p1:Value>hello world! all is well</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>french</d2p1:Key>
+          <d2p1:Value>bonjour tout le monde</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+        <d2p1:KeyValueOfstringstring>
+          <d2p1:Key>spanish</d2p1:Key>
+          <d2p1:Value>hola todos</d2p1:Value>
+        </d2p1:KeyValueOfstringstring>
+      </d2p1:Value>
     </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
     <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
       <d2p1:Key>Unnamed_String12</d2p1:Key>
@@ -63,7 +153,19 @@
       <d2p1:Value />
     </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
     <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
-      <d2p1:Key>Unnamed_String1234</d2p1:Key>
+      <d2p1:Key>Unnamed_String2</d2p1:Key>
+      <d2p1:Value />
+    </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+    <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+      <d2p1:Key>Unnamed_String3</d2p1:Key>
+      <d2p1:Value />
+    </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+    <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+      <d2p1:Key>NewString</d2p1:Key>
+      <d2p1:Value />
+    </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+    <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+      <d2p1:Key>NewString1</d2p1:Key>
       <d2p1:Value />
     </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
   </strings>

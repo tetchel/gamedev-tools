@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
@@ -8,11 +7,13 @@ using System.Linq;
 [InitializeOnLoad]
 public class SceneLoadStringEditor : Editor {
 
-    public const string EXTERNALIZED_INDICATOR = "@";
+    public const string LOCALIZABLE_STRING_INDICATOR = "@";
 
+    // When a scene loads, loop over all Text objects and replace any string starting with LOCALIZABLE_STRING_INDICATOR
+    // with the localized string from the current language 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void beforeSceneLoaded() {
-        Debug.Log("This is running before the scene is loaded");
+        //Debug.Log("This is running before the scene is loaded");
 
         string language = EditorPrefs.GetString(LanguageEditor.PREFS_SELECTED_LANG);
         //Debug.Log("The current language is " + language);
@@ -28,19 +29,19 @@ public class SceneLoadStringEditor : Editor {
         // For each text containing an externalized string, replace the externalized string placeholder
         // with the actual string value for the current language.
         FindObjectsOfType<Text>()
-            .Where(text => text.text.StartsWith(EXTERNALIZED_INDICATOR)).ToList()
+            .Where(text => text.text.StartsWith(LOCALIZABLE_STRING_INDICATOR)).ToList()
             .ForEach(text => {
-                string stringName = text.text.Substring(EXTERNALIZED_INDICATOR.Length);
+                string stringName = text.text.Substring(LOCALIZABLE_STRING_INDICATOR.Length);
+
+                // load the dictionary which maps languages to their translated versions
                 Dictionary<string, string> thisStringDict;
-                bool got = dict.TryGetValue(stringName, out thisStringDict);
-                if(!got) {
+                if(!dict.TryGetValue(stringName, out thisStringDict)) {
                     Debug.LogError("No localizable string named: " + stringName);
                     return;
                 }
 
                 string thisLanguageString;
-                got = thisStringDict.TryGetValue(language, out thisLanguageString);
-                if(!got) {
+                if(!thisStringDict.TryGetValue(language, out thisLanguageString)) {
                     Debug.LogError("No entry for string " + stringName + " in language " + language);
                     return;
                 }
@@ -49,5 +50,4 @@ public class SceneLoadStringEditor : Editor {
                 text.text = thisLanguageString;
             });
     }
-
 }

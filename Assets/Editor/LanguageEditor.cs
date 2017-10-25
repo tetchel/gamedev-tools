@@ -18,6 +18,11 @@ public class LanguageEditor : EditorWindow {
 
     private LanguageEditor() { }
 
+    [MenuItem("Edit/Localizer/Language")]
+    public static void ShowWindow() {
+        GetWindow(typeof(LanguageEditor), false, title: "Localizer");
+    }
+
     void OnEnable() {
         // Load languages from EditorPrefs - reverse of what we do in OnDestroy()
         string selectedLanguage = EditorPrefs.GetString(PREFS_SELECTED_LANG);
@@ -26,21 +31,28 @@ public class LanguageEditor : EditorWindow {
         _selectedLanguageIndex = _languages.FindIndex(l => l == selectedLanguage);
     }
 
+    void OnDestroy() {
+        saveLanguages();
+    }
+
+    void saveLanguages() {
+        // Save the languages separated by spaces
+        string allLanguages = String.Join(" ", _languages.ToArray());
+
+        EditorPrefs.SetString(PREFS_ALL_LANGS, allLanguages);
+        EditorPrefs.SetString(PREFS_SELECTED_LANG, _languages[_selectedLanguageIndex]);
+    }
+
     public static List<string> loadAllLanguages() {
         string allLanguages = EditorPrefs.GetString(PREFS_ALL_LANGS);
         return allLanguages.Split(' ').ToList();
     }
 
-    [MenuItem("Edit/Localizer/Language")]
-    public static void ShowWindow() {
-        GetWindow(typeof(LanguageEditor), false, title: "Localizer");
-    }
-
     void OnGUI() {
-        // TODO allow opening Strings window from this one
         GUILayout.BeginVertical(GUILayout.Height(position.height));
         EditorGUILayout.Space();
 
+        // Top row - New Language text box and Add button to do the adding
         GUILayout.BeginHorizontal();
         _newLanguageTextField = GUILayout.TextField(_newLanguageTextField, 32, GUILayout.Width(250));
 
@@ -61,6 +73,7 @@ public class LanguageEditor : EditorWindow {
                 _selectedLanguageIndex = i;
             }
 
+            // a Remove button for each existing language
             if (GUILayout.Button("Remove", GUILayout.Width(100))) {
                 bool remove = EditorUtility.DisplayDialog("Remove Language",
                     "Are you sure you want to remove " + _languages[i] + "?\nThis will not delete any of its strings.", 
@@ -118,17 +131,5 @@ public class LanguageEditor : EditorWindow {
 
     bool isLetterOrNumber(char c) {
         return (c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122);
-    }
-
-    void OnDestroy() {
-        saveLanguages();
-    }
-
-    void saveLanguages() {
-        // Save the languages separated by spaces
-        string allLanguages = String.Join(" ", _languages.ToArray());
-
-        EditorPrefs.SetString(PREFS_ALL_LANGS, allLanguages);
-        EditorPrefs.SetString(PREFS_SELECTED_LANG, _languages[_selectedLanguageIndex]);
     }
 }

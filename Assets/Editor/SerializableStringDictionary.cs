@@ -23,7 +23,7 @@ public class SerializableStringDictionary {
 
     public static void write<T>(T toWrite, string outputXmlFile) {
         if (toWrite == null) {
-            Debug.LogError("Can't write a null dictionary");
+            Debug.LogError("Can't write a null object");
             return;
         }
 
@@ -31,7 +31,7 @@ public class SerializableStringDictionary {
 
         using (var strWriter = new StringWriter()) {
             using (var writer = new XmlTextWriter(strWriter)) {
-                //writer.Formatting = Formatting.Indented;
+                writer.Formatting = Formatting.Indented;
                 serializer.WriteObject(writer, toWrite);
                 //writer.Flush();
                 File.WriteAllText(outputXmlFile, strWriter.ToString());
@@ -41,9 +41,9 @@ public class SerializableStringDictionary {
 
     public static T read<T>(string inputXmlFile) {
         string xml = File.ReadAllText(inputXmlFile);
-        Debug.Log("Read this xml: " + xml);
         using (var strReader = new StringReader(xml)) {
             using (XmlTextReader xmlReader = new XmlTextReader(strReader)) {
+                xmlReader.WhitespaceHandling = WhitespaceHandling.None;
                 return (T)serializer.ReadObject(xmlReader);
             }
         }

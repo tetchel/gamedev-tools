@@ -18,6 +18,11 @@ public class SceneLoadStringEditor : Editor {
         string language = EditorPrefs.GetString(LanguageEditor.PREFS_SELECTED_LANG);
         //Debug.Log("The current language is " + language);
 
+        if(string.IsNullOrEmpty(language)) {
+            Debug.LogError("No language is selected for the string externalizing tool! Loading strings will not work.");
+            return;
+        }
+
         Dictionary<string, Dictionary<string, string>> dict = StringEditor.instance().dict();
 
         if(dict == null) {
@@ -26,10 +31,12 @@ public class SceneLoadStringEditor : Editor {
             return;
         }
 
+
+        Text[] allTexts = FindObjectsOfType<Text>();
+
         // For each text containing an externalized string, replace the externalized string placeholder
         // with the actual string value for the current language.
-        FindObjectsOfType<Text>()
-            .Where(text => text.text.StartsWith(LOCALIZABLE_STRING_INDICATOR)).ToList()
+        allTexts.Where(text => text.text.StartsWith(LOCALIZABLE_STRING_INDICATOR)).ToList()
             .ForEach(text => {
                 string stringName = text.text.Substring(LOCALIZABLE_STRING_INDICATOR.Length);
 
@@ -48,6 +55,13 @@ public class SceneLoadStringEditor : Editor {
 
                 //Debug.Log(stringName + " in " + language + " is " + thisLanguageString);
                 text.text = thisLanguageString;
+            });
+
+        // You can also escape the indicator with a \, in this case we just remove the '\'
+        // and the string will not be externalized.
+        allTexts.Where(text => text.text.StartsWith('\\' + LOCALIZABLE_STRING_INDICATOR)).ToList()
+            .ForEach(text => {
+                text.text = text.text.Substring(1, text.text.Length-1);
             });
     }
 }

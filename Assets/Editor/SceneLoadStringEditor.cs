@@ -2,17 +2,32 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
+using UnityEditor.Build;
 using System.Linq;
 
 [InitializeOnLoad]
-public class SceneLoadStringEditor : Editor {
+public class SceneLoadStringEditor : Editor, IPreprocessBuild {
 
     public const string LOCALIZABLE_STRING_INDICATOR = "@";
 
-    // When a scene loads, loop over all Text objects and replace any string starting with LOCALIZABLE_STRING_INDICATOR
-    // with the localized string from the current language 
+    int IOrderedCallback.callbackOrder {
+        get {
+            return 0;
+        }
+    }
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void beforeSceneLoaded() {
+        replaceAllStrings();
+    }
+
+    public void OnPreprocessBuild(BuildTarget target, string path) {
+        replaceAllStrings();
+    }
+
+    // Loop over all Text objects and replace any string starting with LOCALIZABLE_STRING_INDICATOR
+    // with the localized string from the current language 
+    private static void replaceAllStrings() {
         //Debug.Log("This is running before the scene is loaded");
 
         string language = EditorPrefs.GetString(LanguageEditor.PREFS_SELECTED_LANG);

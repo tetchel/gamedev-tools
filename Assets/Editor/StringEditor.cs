@@ -12,8 +12,9 @@ public class StringEditor : EditorWindow {
 
     private static string _storageFile;
 
-    // default window size, will be overwritten when user resizes.
-    // private Vector2 _size = new Vector2(1280, 720);
+    private Vector2 _size = new Vector2(1280, 720);
+
+    private Vector2 _scrollPos;
 
     private StringEditor() { }
 
@@ -35,6 +36,8 @@ public class StringEditor : EditorWindow {
     }
 
     void OnEnable() {
+        position = new Rect(position.position, _size);
+
         // load the dictionary from the xml
         _storageFile = Path.Combine(Application.dataPath, "strings.xml");
         _strings = SerializableStringDictionary.read<SerializableStringDictionary>(_storageFile);
@@ -42,6 +45,7 @@ public class StringEditor : EditorWindow {
 
     void OnDestroy() {
         // Remember size in case user resized
+        _size = position.size;
 
         // Save the dictionary to file
         SerializableStringDictionary.write(_strings, _storageFile);
@@ -53,7 +57,7 @@ public class StringEditor : EditorWindow {
         EditorGUILayout.Space();
         stringsTable();
 
-        GUILayout.FlexibleSpace();
+        //GUILayout.FlexibleSpace();
 
         GUILayoutOption width = GUILayout.Width(150);
         GUILayoutOption height = GUILayout.Height(25);
@@ -78,14 +82,22 @@ public class StringEditor : EditorWindow {
 
         int removeButtonWidth = 80;
         int rowHeight = 20;
+        int minimumColWidth = 256;
         // first column is smaller than the others
-        //float firstColWidth = (position.width - removeButtonWidth) / (languages.Count + 1) / 2;
-        // rest of the columns take up remaining space evenly. -25 stops overflow out the right side
-        float subseqColWidth = (position.width - removeButtonWidth - 25) / (languages.Count + 1);
+        float firstColWidth = (position.width - removeButtonWidth) / (languages.Count + 1) / 2;
+        if(firstColWidth < minimumColWidth) {
+            firstColWidth = minimumColWidth;
+        }
+        // rest of the columns take up remaining space evenly. -35 stops overflow out the right side
+        float subseqColWidth = (position.width - firstColWidth - removeButtonWidth - 35) / languages.Count;
+        if(subseqColWidth < minimumColWidth) {
+            subseqColWidth = minimumColWidth;
+        }
         
         // Top row - Titles
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("String Name", GUILayout.Width(subseqColWidth));
+        EditorGUILayout.LabelField("", GUILayout.Width(removeButtonWidth));
+        EditorGUILayout.LabelField("String Name", GUILayout.Width(firstColWidth));
         foreach (string lang in languages) {
             EditorGUILayout.LabelField(lang, GUILayout.Width(subseqColWidth));
         }
@@ -97,6 +109,8 @@ public class StringEditor : EditorWindow {
         Dictionary<string, string> stringsToRename = new Dictionary<string, string>();
        
         int originalFontsize = GUI.skin.textField.fontSize;
+
+        _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
         // Loop over strings, and put the string name + the corresponding translated strings into the table as rows
         foreach (KeyValuePair<string, Dictionary<string, string>> entry in _strings.dict()) {
             string stringName = entry.Key;
@@ -105,9 +119,19 @@ public class StringEditor : EditorWindow {
             GUI.skin.textField.fontSize = 14;
 
             EditorGUILayout.BeginHorizontal();
+            // a Remove button for each string
+            if(GUILayout.Button("Remove", GUILayout.Width(removeButtonWidth), GUILayout.Height(rowHeight))) {
+                if(EditorUtility.DisplayDialog("Remove String", "Are you ABSOLUTELY sure you want to remove " 
+                    + stringName + "?\nThis WILL DELETE all translations of this string.", 
+                    "OK", "Cancel")) {
+                    // A stringToRename with a null new name means a string to delete
+                    stringsToRename.Add(stringName, null);
+                }
+            }
+
             // It would be better to make this a Delayed field since we don't have to store values while user is typing
             // But then if a user closes the window without deselecting the textfield, the changes will not be saved.
-            string newStringName = EditorGUILayout.TextField(stringName, GUILayout.Width(subseqColWidth), 
+            string newStringName = EditorGUILayout.TextField(stringName, GUILayout.Width(firstColWidth), 
                 GUILayout.Height(rowHeight));
             if(newStringName != stringName) {
                 if(stringsToRename.ContainsKey(stringName)) {
@@ -132,16 +156,6 @@ public class StringEditor : EditorWindow {
                     //Debug.Log("changed " + lang + " " + stringName + " to " + newTranslated);
                 }
             }
-
-            // a Remove button for each string
-            if(GUILayout.Button("Remove", GUILayout.Width(removeButtonWidth), GUILayout.Height(rowHeight))) {
-                if(EditorUtility.DisplayDialog("Remove String", "Are you ABSOLUTELY sure you want to remove " 
-                    + stringName + "?\nThis WILL DELETE all translations of this string.", 
-                    "OK", "Cancel")) {
-                    // A stringToRename with a null new name means a string to delete
-                    stringsToRename.Add(stringName, null);
-                }
-            }
             EditorGUILayout.EndHorizontal();
         }
         GUI.skin.textField.fontSize = originalFontsize;
@@ -163,19 +177,19 @@ public class StringEditor : EditorWindow {
         }
         stringsToRename.Clear();
 
-        string defaultStringName = "NewString";
+        string defaultStringBaseName = "NewString";
+        string defaultStringName = defaultStringBaseName;
         int defaultStringIndex = 1;
-        if(GUILayout.Button("Add String", GUILayout.Width(subseqColWidth), GUILayout.Height(30))) {
+        if(GUILayout.Button("Add String", GUILayout.Width(firstColWidth), GUILayout.Height(30))) {
             // Add an index to the new string names to prevent collision
             // eg. UnnamedString, UnnamedString1, UnnamedString2 ...
             while(_strings.dict().ContainsKey(defaultStringName)) {
-                if(defaultStringIndex > 1) {
-                    defaultStringName = defaultStringName.Substring(0, defaultStringName.Length - 1);
-                }
-                defaultStringName += defaultStringIndex;
-                defaultStringIndex++;
+                defaultStringName = defaultStringBaseName + defaultStringIndex++;
             }
             _strings.dict().Add(defaultStringName, new Dictionary<string, string>());
         }
+
+        GUILayout.FlexibleSpace();
+        EditorGUILayout.EndScrollView();
     }
 }

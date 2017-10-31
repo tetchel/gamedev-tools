@@ -168,5 +168,49 @@
       <d2p1:Key>NewString1</d2p1:Key>
       <d2p1:Value />
     </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+    <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+      <d2p1:Key>NewString2</d2p1:Key>
+      <d2p1:Value />
+    </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+    <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+      <d2p1:Key>NewString3</d2p1:Key>
+      <d2p1:Value />
+    </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+    <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+      <d2p1:Key>NewString4</d2p1:Key>
+      <d2p1:Value />
+    </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+    <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+      <d2p1:Key>NewString5</d2p1:Key>
+      <d2p1:Value />
+    </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+    <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+      <d2p1:Key>NewString6</d2p1:Key>
+      <d2p1:Value />
+    </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+    <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+      <d2p1:Key>NewString7</d2p1:Key>
+      <d2p1:Value />
+    </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+    <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+      <d2p1:Key>NewString8</d2p1:Key>
+      <d2p1:Value />
+    </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+    <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+      <d2p1:Key>NewString9</d2p1:Key>
+      <d2p1:Value />
+    </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+    <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+      <d2p1:Key>NewString10</d2p1:Key>
+      <d2p1:Value />
+    </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+    <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+      <d2p1:Key>NewString11</d2p1:Key>
+      <d2p1:Value />
+    </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+    <d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
+      <d2p1:Key>NewString12</d2p1:Key>
+      <d2p1:Value />
+    </d2p1:KeyValueOfstringArrayOfKeyValuePairOfstringstring>
   </strings>
 </SerializableStringDictionary>

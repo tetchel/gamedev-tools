@@ -6,9 +6,13 @@ using UnityEditor.Build;
 using System.Linq;
 
 [InitializeOnLoad]
-public class SceneLoadStringEditor : Editor, IPreprocessBuild {
+public class SceneLoadStringEditor : Editor, IPreprocessBuild, IPostprocessBuild {
 
     public const string LOCALIZABLE_STRING_INDICATOR = "@";
+
+    // Maps Text elements that had their strings replaced to the original 
+    // placeholder-string content.
+    private static Dictionary<Text, string> replacedStrings = new Dictionary<Text, string>();
 
     int IOrderedCallback.callbackOrder {
         get {
@@ -25,9 +29,20 @@ public class SceneLoadStringEditor : Editor, IPreprocessBuild {
         replaceAllStrings();
     }
 
+    // Undo the changes we made to the scene in replaceAllStrings, so that
+    // the scene editor will have the placeholder strings again.
+    public void OnPostprocessBuild(BuildTarget target, string path) {
+        // does not work, Text objects don't exist any more at this time.
+//        foreach(KeyValuePair<Text, string> changedText in replacedStrings) {
+//            changedText.Key.text = changedText.Value;
+//        }
+    }
+
     // Loop over all Text objects and replace any string starting with LOCALIZABLE_STRING_INDICATOR
     // with the localized string from the current language 
     private static void replaceAllStrings() {
+        replacedStrings.Clear();
+
         //Debug.Log("This is running before the scene is loaded");
 
         string language = EditorPrefs.GetString(LanguageEditor.PREFS_SELECTED_LANG);
@@ -46,13 +61,14 @@ public class SceneLoadStringEditor : Editor, IPreprocessBuild {
             return;
         }
 
-
         Text[] allTexts = FindObjectsOfType<Text>();
 
         // For each text containing an externalized string, replace the externalized string placeholder
         // with the actual string value for the current language.
         allTexts.Where(text => text.text.StartsWith(LOCALIZABLE_STRING_INDICATOR)).ToList()
             .ForEach(text => {
+                replacedStrings.Add(text, text.text);
+
                 string stringName = text.text.Substring(LOCALIZABLE_STRING_INDICATOR.Length);
 
                 // load the dictionary which maps languages to their translated versions
@@ -76,6 +92,7 @@ public class SceneLoadStringEditor : Editor, IPreprocessBuild {
         // and the string will not be externalized.
         allTexts.Where(text => text.text.StartsWith('\\' + LOCALIZABLE_STRING_INDICATOR)).ToList()
             .ForEach(text => {
+                replacedStrings.Add(text, text.text);
                 text.text = text.text.Substring(1, text.text.Length-1);
             });
     }

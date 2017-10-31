@@ -82,14 +82,14 @@ public class StringEditor : EditorWindow {
 
         int removeButtonWidth = 80;
         int rowHeight = 20;
-        int minimumColWidth = 256;
+        float minimumColWidth = 256;
         // first column is smaller than the others
         float firstColWidth = (position.width - removeButtonWidth) / (languages.Count + 1) / 2;
-        if(firstColWidth < minimumColWidth) {
-            firstColWidth = minimumColWidth;
+        if(firstColWidth < minimumColWidth / 1.5f) {
+            firstColWidth = minimumColWidth / 1.5f;
         }
-        // rest of the columns take up remaining space evenly. -35 stops overflow out the right side
-        float subseqColWidth = (position.width - firstColWidth - removeButtonWidth - 35) / languages.Count;
+        // rest of the columns take up remaining space evenly. -50 stops overflow out the right side when scrolling
+        float subseqColWidth = (position.width - firstColWidth - removeButtonWidth - 50) / languages.Count;
         if(subseqColWidth < minimumColWidth) {
             subseqColWidth = minimumColWidth;
         }

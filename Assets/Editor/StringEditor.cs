@@ -10,7 +10,9 @@ public class StringEditor : EditorWindow {
     // The first key is the string name, which points to a dict which maps language names to translated strings.dict().
     private SerializableStringDictionary _strings;
 
-    private static string _storageFile;
+    public const string STRINGS_FILENAME = "strings.xml";
+
+    private string _stringsFilePath;
 
     private Vector2 _size = new Vector2(1280, 720);
 
@@ -38,9 +40,15 @@ public class StringEditor : EditorWindow {
     void OnEnable() {
         position = new Rect(position.position, _size);
 
+        _stringsFilePath = Path.Combine(Application.streamingAssetsPath, STRINGS_FILENAME);
         // load the dictionary from the xml
-        _storageFile = Path.Combine(Application.dataPath, "strings.xml");
-        _strings = SerializableStringDictionary.read<SerializableStringDictionary>(_storageFile);
+        _strings = SerializableStringDictionary.read<SerializableStringDictionary>(_stringsFilePath);
+
+        //Debug.Log("Loaded strings from " + _stringsFilePath);
+
+        if(_strings == null ||_strings.dict() == null) {
+            _strings = new SerializableStringDictionary();
+        }
     }
 
     void OnDestroy() {
@@ -48,8 +56,8 @@ public class StringEditor : EditorWindow {
         _size = position.size;
 
         // Save the dictionary to file
-        SerializableStringDictionary.write(_strings, _storageFile);
-        //Debug.Log("saved strings into " + _storageFile);
+        SerializableStringDictionary.write(_strings, _stringsFilePath);
+        //Debug.Log("saved strings into " + _stringsFilePath);
     }
 
     void OnGUI() {
@@ -93,6 +101,8 @@ public class StringEditor : EditorWindow {
         if(subseqColWidth < minimumColWidth) {
             subseqColWidth = minimumColWidth;
         }
+
+        _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
         
         // Top row - Titles
         EditorGUILayout.BeginHorizontal();
@@ -110,7 +120,6 @@ public class StringEditor : EditorWindow {
        
         int originalFontsize = GUI.skin.textField.fontSize;
 
-        _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
         // Loop over strings, and put the string name + the corresponding translated strings into the table as rows
         foreach (KeyValuePair<string, Dictionary<string, string>> entry in _strings.dict()) {
             string stringName = entry.Key;

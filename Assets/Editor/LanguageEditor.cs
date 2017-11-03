@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using UnityEditor;  
 using UnityEngine;
+using System.IO;
 
 public class LanguageEditor : EditorWindow {
 
@@ -15,6 +16,8 @@ public class LanguageEditor : EditorWindow {
 
     private const string NEW_LANGUAGE_INIT = "Enter a new language";
     private string _newLanguageTextField = NEW_LANGUAGE_INIT;
+
+    public const string LANG_FILENAME = "current-language.txt";
 
     private LanguageEditor() { }
 
@@ -40,7 +43,13 @@ public class LanguageEditor : EditorWindow {
         string allLanguages = String.Join(" ", _languages.ToArray());
 
         EditorPrefs.SetString(PREFS_ALL_LANGS, allLanguages);
-        EditorPrefs.SetString(PREFS_SELECTED_LANG, _languages[_selectedLanguageIndex]);
+        string currentLanguage = _languages[_selectedLanguageIndex];
+        EditorPrefs.SetString(PREFS_SELECTED_LANG, currentLanguage);
+
+        // Write language into a text file. This is a crappy way of passing the selected language to 
+        // StreamingAssets so we can access it at runtime (EditorPrefs don't exist)
+        string languageFile = Path.Combine(Application.streamingAssetsPath, LANG_FILENAME);
+        File.WriteAllText(languageFile, currentLanguage);
     }
 
     public static List<string> loadAllLanguages() {

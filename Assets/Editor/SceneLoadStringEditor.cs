@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEditor.Build;
 using System.Linq;
 
+/*
 [InitializeOnLoad]
 public class SceneLoadStringEditor : Editor, IPreprocessBuild, IPostprocessBuild {
 
@@ -97,3 +98,4 @@ public class SceneLoadStringEditor : Editor, IPreprocessBuild, IPostprocessBuild
             });
     }
 }
+*/

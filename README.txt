@@ -11,4 +11,9 @@ in front. So, to add the translations of helloworld into our game, create a Text
 
 3. Run the game. The placeholder strings will be replaced by the translations for the selected language.
 
+Second submission notes:
+- Build and Run now includes translated strings
+- Improve strings editor- now scrolls both ways, and columns have a minimum width
+- Switched to MonoBehaviour that must be attached to texts to be externalized
+
 Source: https://github.com/tetchel/gamedev-tools
